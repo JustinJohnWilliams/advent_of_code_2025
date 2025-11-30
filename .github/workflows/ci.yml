@@ -1,0 +1,29 @@
+name: Advent of Code Builder
+
+on: [push]
+
+jobs:
+  build:
+    name: AoC 2025
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create input files
+        env:
+          DAY01: ${{ secrets.DAY01 }}
+          DAY02: ${{ secrets.DAY02 }}
+          DAY03: ${{ secrets.DAY03 }}
+        run: |
+          mkdir -p inputs
+          printf '%s' "$DAY01" > inputs/01.txt
+          printf '%s' "$DAY02" > inputs/02.txt
+          printf '%s' "$DAY03" > inputs/03.txt
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 10.0.x
+      - name: Run all the things
+        run: |
+          OUTPUT="$(dotnet run --configuration Release)"
+          echo "$OUTPUT" >> $GITHUB_STEP_SUMMARY
