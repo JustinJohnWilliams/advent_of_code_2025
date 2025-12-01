@@ -1,6 +1,6 @@
 ﻿var days = new IDay[]
 {
-    new Day01("Day 01: Secret Entrance", "01.txt", "01.txt", "1066", ""),
+    new Day01("Day 01: Secret Entrance", "01.txt", "01.txt", "1066", "6223"),
 };
 
 var sb = new StringBuilder();
