@@ -34,6 +34,8 @@ public static class Extensions
     public static bool UniqueCharsInString(this string str) => str.GroupBy(c => c).All(c => c.Count() <= 1);
     public static bool IsNullOrEmpty(this string str) => string.IsNullOrEmpty(str);
     public static bool IsNotNullOrEmpty(this string str) => !string.IsNullOrEmpty(str);
+    public static int ToInt32(this string str) => Convert.ToInt32(str);
+    public static long ToInt64(this string str) => Convert.ToInt64(str);
 
     public static T SafeExecute<T>(Func<T> fileOperation, T defaultValue = default!)
     {
