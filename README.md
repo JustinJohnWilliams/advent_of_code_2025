@@ -4,3 +4,4 @@
 
 - [01 - Secret Entrance](./README/01.md)
 - [02 - Gift Shop](./README/02.md)
+- [03 - Lobby](./README/03.md)

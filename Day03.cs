@@ -38,9 +38,50 @@ public class Day03(string name, string input, string example, string r1 = "", st
 
     protected override string SolvePartTwo()
     {
-        var result = 0;
+        var result = 0L;
+        var input = Input.Input_MultiLineTextArray;
+
+        foreach(var line in input)
+        {
+            var joltage = GetMaxJoltage(line, 12);
+            //Console.WriteLine(joltage);
+            result += joltage;
+        }
 
         return result.ToString();
+    }
+
+    private long GetMaxJoltage(string line, int maxLength)
+    {
+        var length = line.Length;
+        if(maxLength >= length) return line.ToInt64(); // bail if less than length
+        var sb = new StringBuilder(maxLength);
+
+        var start = 0;
+        for(int pos = 0; pos < maxLength; pos++)
+        {
+            var remainingPositions = maxLength - pos;
+            var endExclusive = length - remainingPositions + 1;
+
+            var bestDigit = 0;
+            var idx = start;
+
+            for(int i = start; i < endExclusive; i++)
+            {
+                var digit = line[i].ToString().ToInt32();
+                if(digit > bestDigit)
+                {
+                    bestDigit = digit;
+                    idx = i;
+                    if(digit == 9) break;
+                }
+            }
+            sb.Append(bestDigit);
+
+            start = idx + 1;
+        }
+
+        return sb.ToString().ToInt64();
     }
 }
 
