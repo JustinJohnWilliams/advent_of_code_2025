@@ -3,28 +3,44 @@
     new Day01("Day 01: TODO",         "01.txt", "01.txt",             "", ""),
 };
 
-var table = new ConsoleTable("Day", "Problem", "Result", "Time (ms)");
+var sb = new StringBuilder();
+var starCount = 0;
+var table = new ConsoleTable("Day", "Result", "Time (ms)", "");
 var sw = Stopwatch.StartNew();
 
 foreach (var day in days)
 {
-    if (day.Result1.IsNotNullOrEmpty())
+    var p1 = day.PartOne();
+    var p2 = day.PartTwo();
+
+    if (day.Expected1.IsNotNullOrEmpty())
     {
-        var p1 = day.PartOne();
-        if (p1.result != day.Result1) table.AddRow($"---ERROR---", "1", $"{p1.result} != {day.Result1}", "");
-        else table.AddRow($"{day.Name}", "1", p1.result, p1.ms);
+        if (p1.result != day.Expected1) table.AddRow($"---ERROR---", $"{p1.result} != {day.Expected1}", "", "");
+        else table.AddRow($"{day.Name}", p1.result, p1.ms, day.SilverStar() ? "✩" : day.GoldStar() ? "★" : "");
     }
-    if (day.Result2.IsNotNullOrEmpty())
+    if (day.Expected2.IsNotNullOrEmpty())
     {
-        var p2 = day.PartTwo();
-        if (p2.result != day.Result2) table.AddRow($"---ERROR---", "2", $"{p2.result} != {day.Result2}", "");
-        else table.AddRow($"{day.Name}", "2", p2.result, p2.ms);
+        if (p2.result != day.Expected2) table.AddRow($"⤷ ---ERROR---", $"{p2.result} != {day.Expected2}", "", "");
+        else table.AddRow($"⤷ Part 2", p2.result, p2.ms, day.GoldStar() ? "★" : "");
+    }
+
+    if(day.SilverStar())
+    {
+        sb.Append('✩');
+        starCount++;
+    }
+
+    if(day.GoldStar())
+    {
+        sb.Append('★');
+        starCount+=2;
     }
 }
 
 sw.Stop();
 var ms = sw.Elapsed.TotalMilliseconds;
 
-table.AddRow($"TOTAL", "", "", ms);
+table.AddRow("", "", "", "-");
+table.AddRow("TOTAL", sb.ToString(), ms, $"{starCount}");
 
 table.Write(Format.MarkDown);
