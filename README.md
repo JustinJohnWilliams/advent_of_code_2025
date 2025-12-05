@@ -6,3 +6,4 @@
 - [02 - Gift Shop](./README/02.md)
 - [03 - Lobby](./README/03.md)
 - [04 - Printing Department](./README/04.md)
+- [05 - Cafeteria](./README/05.md)

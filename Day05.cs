@@ -23,7 +23,37 @@ public class Day05(string name, string input, string example, string r1 = "", st
     protected override string SolvePartTwo()
     {
         var result = 0L;
-        var input = Input.Input_TwoDCharArray;
+        var input = Input.Input_MultiLineTextArray;
+
+        var ranges = input.Where(c => c.Contains('-')).ToList()
+                    .Select(c => c.SplitAndRemoveEmpty('-'))
+                    .Select(c => (min: c[0].ToInt64(), max: c[1].ToInt64()))
+                    .OrderBy(c => c.min)
+                    .ToList();
+
+        var currentMin = ranges[0].min;
+        var currentMax = ranges[0].max;
+
+        for(int i = 1; i < ranges.Count; i++)
+        {
+            var next = ranges[i];
+            if(next.min <= currentMax + 1)
+            {
+                if(next.max > currentMax)
+                {
+                    currentMax = next.max;
+                }
+            }
+            else
+            {
+                result += (currentMax - currentMin + 1);
+
+                currentMin = next.min;
+                currentMax = next.max;
+            }
+        }
+
+        result += (currentMax - currentMin + 1);
 
         return result.ToString();
     }
