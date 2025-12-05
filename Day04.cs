@@ -53,43 +53,28 @@ public class Day04(string name, string input, string example, string r1 = "", st
 
 public static class DayExtensions
 {
+    private static readonly List<(int x, int y)> Deltas =
+    [
+        (-1, -1), (-1, 0), (-1, 1),
+        ( 0, -1),          ( 0, 1),
+        ( 1, -1), ( 1, 0), ( 1, 1),
+    ];
+
     public static bool CanRemoveRoll(this (int x, int y) roll, char[][] map) => roll.RollNeighborCount(map) < 4;
     public static int RollNeighborCount(this (int x, int y) roll, char[][] map)
     {
         var count = 0;
-        if (roll.HasRollNorthWest(map)) count++;
-        if (roll.HasRollNorth(map))     count++;
-        if (roll.HasRollNorthEast(map)) count++;
-        if (roll.HasRollWest(map))      count++;
-        if (roll.HasRollEast(map))      count++;
-        if (roll.HasRollSouthWest(map)) count++;
-        if (roll.HasRollSouth(map))     count++;
-        if (roll.HasRollSouthEast(map)) count++;
+        foreach (var (dx, dy) in Deltas)
+        {
+            var nx = roll.x + dx;
+            var ny = roll.y + dy;
+            if(nx >= 0 && nx < map.Length && ny >= 0 && ny < map[0].Length
+                && map[nx][ny] == '@')
+            {
+                count++;
+            }
+        }
+
         return count;
     }
-
-    public static bool HasRollNorthWest(this (int x, int y) roll, char[][] map) =>
-        (roll.x - 1 >= 0) && (roll.y - 1 >= 0)
-        && (map[roll.x - 1][roll.y - 1] == '@');
-    public static bool HasRollNorth(this (int x, int y) roll, char[][] map) =>
-        (roll.x - 1 >= 0)
-        && (map[roll.x - 1][roll.y] == '@');
-    public static bool HasRollNorthEast(this (int x, int y) roll, char[][] map) =>
-        (roll.x - 1 >= 0) && (roll.y < map[0].Length - 1)
-        && (map[roll.x - 1][roll.y + 1] == '@');
-    public static bool HasRollWest(this (int x, int y) roll, char[][] map) =>
-        (roll.y - 1 >= 0)
-        && (map[roll.x][roll.y - 1] == '@');
-    public static bool HasRollEast(this (int x, int y) roll, char[][] map) =>
-        (roll.y < map[0].Length - 1)
-        && (map[roll.x][roll.y + 1] == '@');
-    public static bool HasRollSouthWest(this (int x, int y) roll, char[][] map) =>
-        (roll.x < map.Length - 1) && (roll.y - 1 >= 0)
-        && (map[roll.x + 1][roll.y - 1] == '@');
-    public static bool HasRollSouth(this (int x, int y) roll, char[][] map) =>
-        (roll.x < map.Length - 1)
-        && (map[roll.x + 1][roll.y] == '@');
-    public static bool HasRollSouthEast(this (int x, int y) roll, char[][] map) =>
-        (roll.x < map.Length - 1) && (roll.y < map[0].Length - 1)
-        && (map[roll.x + 1][roll.y + 1] == '@');
 }
