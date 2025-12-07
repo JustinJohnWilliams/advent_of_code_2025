@@ -1,10 +1,11 @@
 ﻿var days = new IDay[]
 {
-    new Day01("Day 01: Secret Entrance",        "01.txt", "01.txt", "1066",         "6223"),
-    new Day02("Day 02: Gift Shop",              "02.txt", "02.txt", "38158151648",  "45283684555"),
-    new Day03("Day 03: Lobby",                  "03.txt", "03.txt", "17403",        "173416889848394"),
-    new Day04("Day 04: Printing Department",    "04.txt", "04.txt", "1351",         "8345"),
-    new Day05("Day 05: Cafeteria",              "05.txt", "05.txt", "681",          "348820208020395"),
+    new Day01("Day 01: Secret Entrance",        "01.txt", "01.txt", "1066",             "6223"),
+    new Day02("Day 02: Gift Shop",              "02.txt", "02.txt", "38158151648",      "45283684555"),
+    new Day03("Day 03: Lobby",                  "03.txt", "03.txt", "17403",            "173416889848394"),
+    new Day04("Day 04: Printing Department",    "04.txt", "04.txt", "1351",             "8345"),
+    new Day05("Day 05: Cafeteria",              "05.txt", "05.txt", "681",              "348820208020395"),
+    new Day06("Day 06: Trash Compactor",        "06.txt", "06.txt", "4878670269096",    ""),
 };
 
 var sb = new StringBuilder();
