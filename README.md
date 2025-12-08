@@ -8,3 +8,4 @@
 - [04 - Printing Department](./README/04.md)
 - [05 - Cafeteria](./README/05.md)
 - [06 - Trash Compactor](./README/06.md)
+- [07 - Laboratories](./README/07.md)

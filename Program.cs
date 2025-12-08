@@ -6,6 +6,7 @@
     new Day04("Day 04: Printing Department",    "04.txt", "04.txt", "1351",             "8345"),
     new Day05("Day 05: Cafeteria",              "05.txt", "05.txt", "681",              "348820208020395"),
     new Day06("Day 06: Trash Compactor",        "06.txt", "06.txt", "4878670269096",    ""),
+    new Day07("Day 07: Laboratories",           "07.txt", "07.txt", "21",               ""),
 };
 
 var sb = new StringBuilder();
