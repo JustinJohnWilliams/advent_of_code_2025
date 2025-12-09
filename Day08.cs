@@ -5,7 +5,7 @@ public class Day08(string name, string input, string example, string r1 = "", st
         const int K = 1000;
         var result = 1L;
         var input = Input.Input_MultiLineTextArray
-            .Select(c => c.Split(',', StringSplitOptions.RemoveEmptyEntries))
+            .Select(c => c.SplitAndRemoveEmpty(','))
             .Select(c => (x: c[0].ToInt64(), y: c[1].ToInt64(), z: c[2].ToInt64()))
             .ToList();
 
@@ -72,6 +72,64 @@ public class Day08(string name, string input, string example, string r1 = "", st
         return result.ToString();
     }
 
+    protected override string SolvePartTwo()
+    {
+        var result = 0L;
+        var input = Input.Input_MultiLineTextArray
+            .Select(c => c.SplitAndRemoveEmpty(','))
+            .Select(c => (x: c[0].ToInt64(), y: c[1].ToInt64(), z: c[2].ToInt64()))
+            .ToList();
+
+        var n = input.Count;
+        var edgeMax = n * (n - 1) / 2;
+        var edges = new List<Edge>(edgeMax);
+
+        for (int i = 0; i < n; i++)
+        {
+            var p1 = input[i];
+            for (int j = i + 1; j < n; j++)
+            {
+                var p2 = input[j];
+                var dx = p1.x - p2.x;
+                var dy = p1.y - p2.y;
+                var dz = p1.z - p2.z;
+                var dist = (long)(dx * dx + dy * dy + dz * dz);
+                edges.Add(new Edge(i, j, dist));
+            }
+        }
+
+        edges.Sort((a, b) => a.DistanceSquared.CompareTo(b.DistanceSquared));
+
+        // Create initial circuit for each box
+        var circuit = new int[n];
+        for(int i = 0; i < n; i++)
+        {
+            circuit[i] = i;
+        }
+
+        var remaining = n;
+        foreach(var edge in edges)
+        {
+            var ca = circuit[edge.A];
+            var cb = circuit[edge.B];
+
+            if(ca == cb) continue;
+
+            MergeCircuits(edge.A, edge.B, circuit);
+            remaining--;
+
+            if(remaining == 1)
+            {
+                var p1 = input[edge.A];
+                var p2 = input[edge.B];
+                result = p1.x * p2.x;
+                break;
+            }
+        }
+
+        return result.ToString();
+    }
+
     private void MergeCircuits(int a, int b, int[] circuit)
     {
         var ca = circuit[a];
@@ -90,14 +148,6 @@ public class Day08(string name, string input, string example, string r1 = "", st
             }
         }
     }
-
-    protected override string SolvePartTwo()
-    {
-        var result = 0L;
-        var input = Input.Input_MultiLineTextArray;
-
-        return result.ToString();
-    }
 }
 
 public class Edge(int a, int b, long distanceSquared)
@@ -106,6 +156,3 @@ public class Edge(int a, int b, long distanceSquared)
     public int B { get; } = b;
     public long DistanceSquared { get; } = distanceSquared;
 }
-
-
-
