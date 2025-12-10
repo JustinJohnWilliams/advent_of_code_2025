@@ -11,3 +11,4 @@
 - [07 - Laboratories](./README/07.md)
 - [08 - Playground](./README/08.md)
 - [09 - Movie Theater](./README/09.md)
+- [10 - Factory](./README/10.md)

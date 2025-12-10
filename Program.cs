@@ -9,6 +9,7 @@
     new Day07("Day 07: Laboratories",           "07.txt", "07.txt", "1543",             "40"),
     new Day08("Day 08: Playground",             "08.txt", "08.txt", "131580",           "6844224"),
     new Day09("Day 09: Movie Theater",          "09.txt", "09.txt", "4745816424",       ""),
+    new Day10("Day 10: Factory",                "10.txt", "10.txt", "390",              "33"),
 };
 
 var sb = new StringBuilder();

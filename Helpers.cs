@@ -27,6 +27,8 @@ public class Input(string input, string example)
         File.ReadAllLines(example).Select(c => c.Select(d => Convert.ToInt32(d)).ToArray()).ToArray(), []);
     public string[] Example_SingleLineTextSplitEntriesBy(char c) => Extensions.SafeExecute(() =>
         File.ReadAllText(example).Split(c), []);
+    public IEnumerable<string[]> Example_MultiLineTextSplitEntriesBy(char c) => Extensions.SafeExecute(() =>
+        File.ReadAllLines(example).Select(s => s.SplitAndRemoveEmpty(c)), []);
     public string Example_RawFile => example;
 }
 
