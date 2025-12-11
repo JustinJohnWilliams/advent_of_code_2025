@@ -30,6 +30,7 @@ jobs:
           DAY08: ${{ secrets.DAY08 }}
           DAY09: ${{ secrets.DAY09 }}
           DAY10: ${{ secrets.DAY10 }}
+          DAY11: ${{ secrets.DAY11 }}
         run: |
           mkdir -p inputs
           printf '%s' "$DAY01" > inputs/01.txt
@@ -42,6 +43,7 @@ jobs:
           printf '%s' "$DAY08" > inputs/08.txt
           printf '%s' "$DAY09" > inputs/09.txt
           printf '%s' "$DAY10" > inputs/10.txt
+          printf '%s' "$DAY11" > inputs/11.txt
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
