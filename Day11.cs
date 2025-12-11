@@ -1,14 +1,16 @@
+using System.Data;
+
 public class Day11(string name, string input, string example, string r1 = "", string r2 = "") : Day(name, input, example, r1, r2)
 {
     protected override string SolvePartOne()
     {
         var result = 0L;
         var points = Input.Input_MultiLineTextArray
-            .Select(c => c.SplitAndRemoveEmpty(':'))
-            .ToDictionary(
+            | (lines => lines.Select(c => c.SplitAndRemoveEmpty(':')))
+            | (partsSeq => partsSeq.ToDictionary(
                 parts => parts[0],
                 parts => parts[1].SplitAndRemoveEmpty(' ')
-            );
+            ));
 
         //points.ToList().ForEach(c => Console.WriteLine($"{c.Key}: {string.Join(',', c.Value)}"));
 
@@ -24,11 +26,11 @@ public class Day11(string name, string input, string example, string r1 = "", st
     {
         var result = 0L;
         var points = Input.Input_MultiLineTextArray
-            .Select(c => c.SplitAndRemoveEmpty(':'))
-            .ToDictionary(
-                parts => parts[0],
-                parts => parts[1].SplitAndRemoveEmpty(' ')
-            );
+            | Map(SplitAndRemove(':'))
+                >> ToDictionary<string[], string, string[]>(
+                    parts => parts[0],
+                    parts => parts[1].SplitAndRemoveEmpty(' ')
+                );
 
         var cache = new Dictionary<(string node, bool fft, bool dac), long>();
         var visited = new HashSet<string>();

@@ -38,8 +38,8 @@ public abstract class Day(string name, string inputFile, string exampleFile, str
         return (result, sw.Elapsed.TotalMilliseconds);
     }
 
-    public bool SilverStar() => Expected1.IsNotNullOrEmpty() && Result1 == Expected1 && (Expected2.IsNullOrEmpty() || (Expected2.IsNotNullOrEmpty() && Result2 != Expected2));
-    public bool GoldStar() => Expected1.IsNotNullOrEmpty() && Expected2.IsNotNullOrEmpty() && Result1 == Expected1 && Result2 == Expected2;
+    public bool SilverStar() => Expected1.IsStringNotNullOrEmpty() && Result1 == Expected1 && (Expected2.IsStringNullOrEmpty() || (Expected2.IsStringNotNullOrEmpty() && Result2 != Expected2));
+    public bool GoldStar() => Expected1.IsStringNotNullOrEmpty() && Expected2.IsStringNotNullOrEmpty() && Result1 == Expected1 && Result2 == Expected2;
 
     protected abstract string SolvePartOne();
     protected abstract string SolvePartTwo();

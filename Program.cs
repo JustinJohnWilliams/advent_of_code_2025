@@ -23,12 +23,12 @@ foreach (var day in days)
     var p1 = day.PartOne();
     var p2 = day.PartTwo();
 
-    if (day.Expected1.IsNotNullOrEmpty())
+    if (day.Expected1.IsStringNotNullOrEmpty())
     {
         if (p1.result != day.Expected1) table.AddRow($"---ERROR---", $"{p1.result} != {day.Expected1}", "", "");
         else table.AddRow($"{day.Name}", p1.result, p1.ms, day.SilverStar() ? "✩" : day.GoldStar() ? "★" : "");
     }
-    if (day.Expected2.IsNotNullOrEmpty())
+    if (day.Expected2.IsStringNotNullOrEmpty())
     {
         if (p2.result != day.Expected2) table.AddRow($"⤷ ---ERROR---", $"{p2.result} != {day.Expected2}", "", "");
         else table.AddRow($"⤷ Part 2", p2.result, p2.ms, day.GoldStar() ? "★" : "");
