@@ -17,9 +17,129 @@ public class Day10(string name, string input, string example, string r1 = "", st
     protected override string SolvePartTwo()
     {
         var result = 0;
-        var input = Input.Empty;
+        var input = Input.Input_MultiLineTextArray;
+
+        /*
+
+        foreach(var line in input)
+        {
+            var (target, buttons) = ParseMachine2(line);
+            Console.WriteLine($"Target: {string.Join(", ", target)}");
+            Console.WriteLine($"buttons:");
+            foreach(var bl in buttons)
+            {
+                Console.Write($"{string.Join(", ", bl)}");
+                Console.WriteLine();
+            }
+            result += SolveMachine2(target, buttons);
+        }
+        */
 
         return result.ToString();
+    }
+
+    public (int[] target, List<int[]> buttons) ParseMachine2(string line)
+    {
+        var parts = line.SplitAndRemoveEmpty(' ');
+        var targetToken = parts[^1];
+        var target = targetToken.Trim('{', '}').Trim()
+            .SplitAndRemoveEmpty(',')
+            .Select(c => c.ToInt32())
+            .ToArray();
+        
+        var buttons = new List<int[]>();
+        for(int i = 1; i < parts.Length - 1; i++)
+        {
+            var token = parts[i];
+            var inside = token.Trim('(', ')').Trim();
+
+            var indices = inside
+                .SplitAndRemoveEmpty(',')
+                .Select(c => c.ToInt32())
+                .ToArray();
+            
+            buttons.Add(indices);
+        }
+
+        return (target, buttons);
+    }
+
+    // BFS
+    // This one we'll start with the target and subtract one with each button press. We can't go negative so if we hit 0, bail.
+    // e.g. Desired State: { 3, 5, 4, 7 }; Buttons: (3), (1, 3), (2), (2,3), (0,2), (0,1)
+    // Initial: [3,5,4,7]
+    // First Round:
+    //  Press each button once and enqueue:
+    //   B0 (3):        -> [3,5,4,6]
+    //   B1 (1,3):      -> [3,4,4,6]
+    //   B2 (2):        -> [3,5,3,7]
+    //   B3 (2,3):      -> [3,5,3,6]
+    //   B4 (0,2):      -> [2,5,3,7]
+    //   B5 (0,1):      -> [2,4,4,7]
+    // Second Round (e.g. B1's path):
+    //   [3,4,4,6] - B0 (3)     -> [3,4,4,5]
+    //   [3,4,4,6] - B1 (1,3)   -> [3,3,4,5]
+    //   [3,4,4,6] - B2 (2)     -> [3,4,3,6]
+    //   [3,4,4,6] - B3 (2,3)   -> [3,4,3,5]
+    //   [3,4,4,6] - B4 (0,2)   -> [2,4,3,6]
+    //   [3,4,4,6] - B5 (0,1)   -> [2,3,4,6]
+    // Dontinue on until something hits negative or all are 0
+    public int SolveMachine2(int[] target, IReadOnlyList<int[]> buttons)
+    {
+        string MakeKey(int[] k) => string.Join(',', k); //key for hashset
+
+        if(target.All(c => c == 0)) return 0;
+
+        var start = (int[])target.Clone();
+        var startKey = MakeKey(start);
+
+        var visited = new HashSet<string> { startKey };
+        var queue = new Queue<(int[] state, int presses)>();
+
+        queue.Enqueue((start, 0));
+
+        while(queue.Count > 0)
+        {
+            Console.WriteLine($"Queue Count: {queue.Count}");
+            var (state, presses) = queue.Dequeue();
+            bool isZero = true;
+            for(int i = 0; i < state.Length; i++)
+            {
+                if(state[i] != 0)
+                {
+                    isZero = false;
+                    break;
+                }
+            }
+
+            if(isZero) return presses;
+
+            foreach(var button in buttons)
+            {
+                var next = (int[])state.Clone();
+                bool valid = true;
+                foreach(var idx in button)
+                {
+                    if(next[idx] == 0)
+                    {
+                        valid = false;
+                        break;
+                    }
+
+                    next[idx]--; // Subtract one with each press
+                }
+
+                if (!valid) continue;
+
+                var key = MakeKey(next);
+                if(visited.Add(key))
+                {
+                    queue.Enqueue((next, presses + 1));
+                }
+            }
+        }
+
+        return -1;
     }
 
     // bitwise mask
