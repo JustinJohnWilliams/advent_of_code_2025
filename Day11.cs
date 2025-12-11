@@ -23,7 +23,17 @@ public class Day11(string name, string input, string example, string r1 = "", st
     protected override string SolvePartTwo()
     {
         var result = 0L;
-        var input = Input.Input_MultiLineTextArray;
+        var points = Input.Input_MultiLineTextArray
+            .Select(c => c.SplitAndRemoveEmpty(':'))
+            .ToDictionary(
+                parts => parts[0],
+                parts => parts[1].SplitAndRemoveEmpty(' ')
+            );
+
+        var cache = new Dictionary<(string node, bool fft, bool dac), long>();
+        var visited = new HashSet<string>();
+
+        result += CountPathsWithRoute("svr", false, false, points, cache, visited);
 
         return result.ToString();
     }
@@ -51,6 +61,36 @@ public class Day11(string name, string input, string example, string r1 = "", st
 
         visited.Remove(node);
         cache[node] = total;
+        return total;
+    }
+
+    private long CountPathsWithRoute(string node, bool fft, bool dac, Dictionary<string, string[]> graph, Dictionary<(string node, bool fft, bool dac), long> cache, HashSet<string> visited)
+    {
+        if(node == "fft") fft = true;
+        if(node == "dac") dac = true;
+        if(node == "out") return (fft && dac) ? 1L : 0L;
+
+        var key = (node, fft, dac);
+
+        if(cache.TryGetValue(key, out var cached)) return cached;
+
+        if(!graph.TryGetValue(node, out var outputs) || outputs.Length == 0)
+        {
+            cache[key] = 0;
+            return 0;
+        }
+
+        if(!visited.Add(node)) throw new Exception("Cyclical uh oh");
+
+        var total = 0L;
+
+        foreach(var next in outputs)
+        {
+            total += CountPathsWithRoute(next, fft, dac, graph, cache, visited);
+        }
+
+        visited.Remove(node);
+        cache[key] = total;
         return total;
     }
 }
